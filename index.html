@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Floor Map</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fcf1e0;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+        }
+
+        map area {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <video id="video" autoplay loop muted>
+            <source src="https://res.cloudinary.com/dadtoeru9/video/upload/v1737080195/Floor_Map_Animated_Final_upj5ds.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <img src="https://res.cloudinary.com/dadtoeru9/image/upload/v1737080313/Floor-Map-Animated-Final_wspmah.jpg" usemap="#FloorMap" style="position: absolute; top: 0; left: 0; width: 100%; height: auto; opacity: 0;">
+        <map name="FloorMap" id="FloorMap">
+            <area shape="poly" coords="888,1449,888,1449,864,1445,842,1434,826,1417,815,1396,811,1371,811,1371,815,1347,826,1326,842,1309,864,1298,888,1294,888,1294,913,1298,934,1309,951,1326,962,1347,965,1371,965,1371,962,1396,951,1417,934,1434,913,1445,888,1449" href="https://senhengcny2025.github.io/EC/" alt="EC">
+            <area shape="poly" coords="207,997,207,997,181,993,157,981,139,963,127,940,123,913,123,913,127,887,139,864,157,845,181,834,207,829,207,829,234,834,257,845,275,864,287,887,291,913,291,913,287,940,275,963,257,981,234,993,207,997" href="https://senhengcny2025.github.io/HA/" alt="HA">
+            <area shape="poly" coords="902,1159,902,1159,879,1156,860,1146,845,1130,835,1111,831,1089,831,1089,835,1067,845,1047,860,1032,879,1022,902,1018,902,1018,924,1022,943,1032,958,1047,968,1067,972,1089,972,1089,968,1111,958,1130,943,1146,924,1156,902,1159" href="https://senhengcny2025.github.io/BM/" alt="BM">
+            <area shape="poly" coords="887,860,887,860,864,856,845,846,830,831,820,812,816,789,816,789,820,767,830,748,845,733,864,723,887,719,887,719,909,723,928,733,943,748,953,767,957,789,957,789,953,812,943,831,928,846,909,856,887,860" href="https://senhengcny2025.github.io/DG/" alt="DG">
+            <area shape="poly" coords="134,602,134,602,112,598,93,588,78,573,68,554,64,531,64,531,68,509,78,490,93,475,112,465,134,461,134,461,157,465,176,475,191,490,201,509,205,531,205,531,201,554,191,573,176,588,157,598,134,602" href="https://senhengcny2025.github.io/BR/" alt="BR">
+        </map>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const map = document.getElementById('FloorMap');
+        const originalWidth = 1100; // Original video width
+        const originalHeight = 1554; // Original video height
+
+        function scaleCoords() {
+            const videoWidth = video.clientWidth;
+            const videoHeight = video.clientHeight;
+
+            const scaleX = videoWidth / originalWidth;
+            const scaleY = videoHeight / originalHeight;
+
+            const areas = map.getElementsByTagName('area');
+
+            for (let area of areas) {
+                const originalCoords = area.dataset.originalCoords.split(',').map(Number);
+                const scaledCoords = originalCoords.map((value, index) =>
+                    index % 2 === 0 ? Math.round(value * scaleX) : Math.round(value * scaleY)
+                );
+                area.coords = scaledCoords.join(',');
+            }
+        }
+
+        function initializeMap() {
+            const areas = map.getElementsByTagName('area');
+            for (let area of areas) {
+                area.dataset.originalCoords = area.coords;
+            }
+            scaleCoords();
+        }
+
+        window.addEventListener('resize', scaleCoords);
+        window.addEventListener('load', initializeMap);
+    </script>
+</body>
+</html>
