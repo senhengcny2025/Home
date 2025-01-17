@@ -32,7 +32,7 @@
 </head>
 <body>
     <div class="container">
-        <video id="video" autoplay loop muted>
+        <video id="video" autoplay loop muted playsinline>
             <source src="https://res.cloudinary.com/dadtoeru9/video/upload/v1737080195/Floor_Map_Animated_Final_upj5ds.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
@@ -52,6 +52,7 @@
         const originalWidth = 1100; // Original video width
         const originalHeight = 1554; // Original video height
 
+        // Function to scale coordinates dynamically based on video size
         function scaleCoords() {
             const videoWidth = video.clientWidth;
             const videoHeight = video.clientHeight;
@@ -70,6 +71,7 @@
             }
         }
 
+        // Initialize the map by storing original coordinates
         function initializeMap() {
             const areas = map.getElementsByTagName('area');
             for (let area of areas) {
@@ -77,6 +79,13 @@
             }
             scaleCoords();
         }
+
+        // Attempt to play the video on load or fallback to user interaction
+        video.play().catch(() => {
+            document.addEventListener('touchstart', () => {
+                video.play().catch(err => console.error('Playback failed:', err));
+            }, { once: true });
+        });
 
         window.addEventListener('resize', scaleCoords);
         window.addEventListener('load', initializeMap);
